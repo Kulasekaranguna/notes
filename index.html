@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        width: 100vw;
+        height: 100vh;
+        background: #000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .box {
+        width: 50%;
+        min-height: 600px;
+        background: #ffffff;
+        border-radius: 25px;
+        overflow: auto;
+      }
+      .head {
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+        background: #ffa32a;
+        border-radius: 25px 25px 0 0;
+      }
+      form {
+        display: flex;
+        justify-content: center;
+        padding: 20px 0;
+      }
+      input {
+        width: 250px;
+        height: 40px;
+        border-radius: 10px 0 0 10px;
+        border: 1px solid black;
+      }
+      button {
+        width: 100px;
+        background: #c9c9c9;
+        border: 1px solid black;
+        border-radius: 0 10px 10px 0;
+      }
+      h1 {
+        font-size: 4em;
+        color: #272727;
+        font-family: "Courier New", Courier, monospace;
+      }
+      li {
+        margin: 20px;
+        font-size: 1.5em;
+        list-style-type: square;
+      }
+      .body {
+        padding: 20px;
+        overflow: auto;
+      }
+      #del {
+        padding: 10px;
+        margin: 20px;
+        border-radius: 20px;
+        background: #ff9999;
+      }
+      @media (max-width: 768px){
+        .box {
+        width: 90%;
+        min-height: 400px;
+        background: #ffffff;
+        border-radius: 25px;
+      }
+      }
+        
+      
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <div class="head">
+        <h1>Notes</h1>
+      </div>
+      <div class="body">
+        <form action="">
+          <input type="text" id="input" maxlength="100" />
+          <button id="btn">Add</button>
+        </form>
+        <ul id="display"></ul>
+      </div>
+    </div>
+    <button id="del">Delete All</button>
+    <script>
+      let btn = document.getElementById("btn");
+      let del = document.getElementById("del");
+      let notes_arrays = JSON.parse(localStorage.getItem("notes")) || [];
+      let ndisplay = document.getElementById("display");
+
+      function display() {
+        ndisplay.innerHTML = "";
+        notes_arrays.forEach((notes_array, index) => {
+          let list = document.createElement("li");
+          list.innerHTML = ` ${notes_array}`;
+          ndisplay.appendChild(list);
+        });
+      }
+
+      del.onclick = function () {
+        localStorage.clear();
+        window.location.reload();
+      };
+
+      display();
+
+      btn.onclick = () => {
+        let input = document.getElementById("input");
+        if (notes_arrays.length < 10) {
+          notes_arrays.push(input.value);
+          localStorage.setItem("notes", JSON.stringify(notes_arrays));
+
+          display();
+        } else {
+          alert("Maximum notes reached.");
+        }
+        input.value = "";
+
+        console.log(notes_arrays);
+      };
+    </script>
+  </body>
+</html>
